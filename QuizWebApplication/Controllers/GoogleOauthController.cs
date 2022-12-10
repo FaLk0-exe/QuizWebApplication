@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using QuizWebApplication.Helpers;
+using QuizBLL.Helpers;
 using QuizWebApplication.Services;
 using System;
 using System.Threading.Tasks;

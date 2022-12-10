@@ -9,7 +9,7 @@ namespace QuizDAL.Interfaces
     public interface IResultRepository
     {
         public Result GetResult(string userId);
-        public IQueryable<Result> GetResults();
+        public IEnumerable<Result> GetResults();
         public bool SubmitResult(Result result);
     }
 }

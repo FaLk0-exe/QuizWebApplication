@@ -7,21 +7,21 @@ using System.Text;
 
 namespace QuizDAL.Repositories
 {
-    class QuestionRepository : IQuestionRepository
+    public class QuestionRepository : IQuestionRepository
     {
         QuizContext _quizContext;
         public QuestionRepository()
         {
             _quizContext = new QuizContext();
         }
-        public IQueryable<Answer> GetAnswers(int questionId)
+        public IEnumerable<Answer> GetAnswers(int questionId)
         {
-            return _quizContext.Answers.Where(answer=>answer.QuestionId==questionId);
+            return _quizContext.Answers.Where(answer=>answer.QuestionId==questionId).AsEnumerable();
         }
 
-        public IQueryable<Question> GetQuestions(int themeId)
+        public IEnumerable<Question> GetQuestions(int themeId)
         {
-            return _quizContext.Questions.Where(question=>question.ThemeId==themeId);
+            return _quizContext.Questions.Where(question=>question.ThemeId==themeId).AsEnumerable();
         }
     }
 }

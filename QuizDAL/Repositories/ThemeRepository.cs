@@ -14,9 +14,9 @@ namespace QuizDAL.Repositories
         {
             _context = new QuizContext();
         }
-        public IQueryable<Theme> GetThemes()
+        public IEnumerable<Theme> GetThemes()
         {
-            return _context.Themes.AsQueryable();
+            return _context.Themes.AsEnumerable();
         }
     }
 }

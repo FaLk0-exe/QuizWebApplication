@@ -8,7 +8,7 @@ namespace QuizDAL.Interfaces
 {
     public interface IQuestionRepository
     {
-        public IQueryable<Question> GetQuestions(int themeId);
-        public IQueryable<Answer> GetAnswers(int questionId);
+        public IEnumerable<Question> GetQuestions(int themeId);
+        public IEnumerable<Answer> GetAnswers(int questionId);
     }
 }

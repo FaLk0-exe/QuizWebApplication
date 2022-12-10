@@ -19,9 +19,9 @@ namespace QuizDAL.Repositories
             return _context.Results.FirstOrDefault(result => result.UserId == userId);
         }
 
-        public IQueryable<Result> GetResults()
+        public IEnumerable<Result> GetResults()
         {
-            return _context.Results.AsQueryable();
+            return _context.Results.AsEnumerable();
         }
 
         public bool SubmitResult(Result result)

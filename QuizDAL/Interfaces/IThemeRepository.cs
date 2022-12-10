@@ -8,6 +8,6 @@ namespace QuizDAL.Interfaces
 {
     public interface IThemeRepository
     {
-        public IQueryable<Theme> GetThemes();
+        public IEnumerable<Theme> GetThemes();
     }
 }
