@@ -24,7 +24,7 @@ namespace QuizDAL.Repositories
             return _context.Results.AsEnumerable();
         }
 
-        public bool SubmitResult(Result result)
+        public void SubmitResult(Result result)
         {
             try
             {
@@ -32,11 +32,10 @@ namespace QuizDAL.Repositories
                     throw new NullReferenceException();
                 _context.Entry(result).State = Microsoft.EntityFrameworkCore.EntityState.Added;
                 _context.SaveChanges();
-                return true;
             }
             catch
             {
-                return false;
+                throw;
             }
         }
     }

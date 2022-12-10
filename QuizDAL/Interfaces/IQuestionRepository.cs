@@ -10,5 +10,6 @@ namespace QuizDAL.Interfaces
     {
         public IEnumerable<Question> GetQuestions(int themeId);
         public IEnumerable<Answer> GetAnswers(int questionId);
+        public IEnumerable<Question> GetRandomQuestions(int themeId,int count);
     }
 }

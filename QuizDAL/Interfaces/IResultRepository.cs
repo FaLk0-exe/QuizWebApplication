@@ -10,6 +10,6 @@ namespace QuizDAL.Interfaces
     {
         public Result GetResult(string userId);
         public IEnumerable<Result> GetResults();
-        public bool SubmitResult(Result result);
+        public void SubmitResult(Result result);
     }
 }
