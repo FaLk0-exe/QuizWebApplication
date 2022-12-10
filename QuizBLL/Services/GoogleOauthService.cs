@@ -1,9 +1,7 @@
 ﻿using Microsoft.AspNetCore.WebUtilities;
-using QuizWebApplication.Helpers;
-using QuizWebApplication.Models;
-using System;
+using QuizBLL.Helpers;
+using QuizBLL.Models;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace QuizWebApplication.Services
