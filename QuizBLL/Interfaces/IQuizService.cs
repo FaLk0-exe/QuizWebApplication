@@ -8,7 +8,6 @@ namespace QuizBLL.Interfaces
     {
         public void InitializeQuestions(int count);
         public void SelectAnswer(int answerId);
-        private void SubmitResult();
    
     }
 }
