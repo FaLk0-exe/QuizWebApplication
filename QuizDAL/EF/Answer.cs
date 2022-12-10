@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 #nullable disable
 
-namespace QuizDAL
+namespace QuizDAL.EF
 {
     public partial class Answer
     {
