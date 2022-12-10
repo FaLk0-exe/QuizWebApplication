@@ -42,7 +42,6 @@ namespace QuizWebApplication.Services
                 {"redirect_uri",redirectUrl }
             };
             var tokenResult = await HttpClientHelper.SendPostRequest<TokenResult>(tokenEndpoint, oauthParams);
-            var refreshedToken = await GoogleOauthService.RefreshTokenAsync(tokenResult.RefreshToken);
             return tokenResult;
         }
         public static async Task<TokenResult> RefreshTokenAsync(string refreshToken)
@@ -54,9 +53,7 @@ namespace QuizWebApplication.Services
                 { "grant_type", "refresh_token" },
                 { "refresh_token", refreshToken }
             };
-
             var tokenResult = await HttpClientHelper.SendPostRequest<TokenResult>(_refreshEndpoint, refreshParams);
-
             return tokenResult;
         }
     }

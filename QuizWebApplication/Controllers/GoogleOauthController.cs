@@ -3,8 +3,6 @@ using Microsoft.AspNetCore.Mvc;
 using QuizWebApplication.Helpers;
 using QuizWebApplication.Services;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace QuizWebApplication.Controllers
@@ -16,6 +14,7 @@ namespace QuizWebApplication.Controllers
         public IActionResult RedirectOnOauthServer()
         {
             var codeVerifier = Guid.NewGuid().ToString();
+            HttpContext.Session.SetString("codeVerifier", codeVerifier);
             var codeChallenge = Sha256Helper.ComputeHash(codeVerifier);
             return Redirect(GoogleOauthService.GenerateOauthRequestUrl(_scope,_redirectUrl,codeChallenge));
         }
