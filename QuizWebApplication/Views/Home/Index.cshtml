@@ -5,5 +5,7 @@
 
 <div class="text-center">
     <h1 class="display-4">Welcome</h1>
-    <a href="@Url.ActionLink(controller:"Home",action:"Login")">Authorize</a>
+    @{      
+        <a href="@Url.ActionLink(controller: "Home", action: "Login")">Login</a>
+    }
 </div>

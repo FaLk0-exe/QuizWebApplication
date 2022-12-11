@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Authentication.Google;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using Microsoft.Net.Http.Headers;
 using QuizWebApplication.Models;
 using System;
 using System.Collections.Generic;
@@ -24,7 +25,9 @@ namespace QuizWebApplication.Controllers
         
         public IActionResult Index()
         {
-            return View();
+            if(!User.Identity.IsAuthenticated)
+                return View();
+            return Redirect(Url.ActionLink(action: "Themes", controller: "Theme"));
         }
 
 
@@ -45,6 +48,7 @@ namespace QuizWebApplication.Controllers
         public async Task<IActionResult> GoogleResponse()
         {
             var result = await HttpContext.AuthenticateAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+            
             return Redirect(Url.ActionLink(action: "Themes", controller: "Theme"));
         }
         public async Task<IActionResult> Logout()

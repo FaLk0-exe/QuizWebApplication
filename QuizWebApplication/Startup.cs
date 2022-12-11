@@ -39,7 +39,6 @@ namespace QuizWebApplication
              {
                  options.ClientId = Configuration["Authentication:Google:ClientId"];
                  options.ClientSecret = Configuration["Authentication:Google:ClientSecret"];
-                 options.ClaimActions.MapJsonKey("urn:google:picture", "picture", "url");
              }
             );
             services.AddAuthorization();
