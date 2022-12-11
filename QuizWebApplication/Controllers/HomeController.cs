@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using QuizWebApplication.Models;
+using QuizWebApplication.Services;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -18,8 +19,9 @@ namespace QuizWebApplication.Controllers
             _logger = logger;
         }
 
-        public IActionResult Index()
+        public IActionResult Index([FromServices] GoogleOauthService googleOauthService)
         {
+            if(googleOauthService)
             return View();
         }
 

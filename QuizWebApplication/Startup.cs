@@ -9,6 +9,7 @@ using QuizBLL.Services;
 using QuizDAL.Interfaces;
 using QuizDAL.Repositories;
 using QuizWebApplication.Controllers;
+using QuizWebApplication.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -31,7 +32,7 @@ namespace QuizWebApplication
             services.AddControllersWithViews();
             services.AddSession();
             services.AddTransient<IQuizService, QuizService>();
-            services.AddScoped<GoogleOauthController>();
+            services.AddScoped<GoogleOauthService>();
             services.AddTransient<IThemeRepository, ThemeRepository>();
             services.AddTransient<IResultRepository, ResultRepository>();
             services.AddTransient<IQuestionRepository, QuestionRepository>();
