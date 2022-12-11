@@ -1,13 +1,14 @@
 ﻿
 @{
-    ViewData["Title"] = "Start";
+    ViewData["Title"] = ViewData["name"];
 }
 
-<h1>Start</h1>
+<h1>@ViewData["name"]</h1>
+<h4>@ViewData["description"]</h4>
 <p>This test will take approximately @ViewData["orientedTime"] minutes.</p>
 <p>Total questions count: @ViewData["count"]</p>
 <p>Are you sure?</p>
-<input class="form-check-input" type="checkbox" onchange="changeButtonCondition()" id="check-accept">
-<label class="form-check-label" for="flexCheckChecked">I agree to start</label><br>
+<label class="form-check-label">I agree to start</label>
+<input type="checkbox" onchange="changeButtonCondition()" id="check-accept"><br>
 <input type="button" id="accept-button" class="btn btn-primary" disabled value="Proceed">
 

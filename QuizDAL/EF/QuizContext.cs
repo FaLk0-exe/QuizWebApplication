@@ -110,6 +110,11 @@ namespace QuizDAL.EF
                     .IsRequired()
                     .HasMaxLength(100)
                     .HasColumnName("name");
+
+                entity.Property(e => e.ThemeDescription)
+                  .IsRequired()
+                  .HasMaxLength(256)
+                  .HasColumnName("themeDescription");
             });
 
             OnModelCreatingPartial(modelBuilder);
