@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.Google;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using QuizWebApplication.Models;
@@ -8,19 +9,19 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace QuizWebApplication.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController()
         {
-            _logger = logger;
         }
 
+        
         public IActionResult Index()
         {
             return View();
@@ -44,22 +45,17 @@ namespace QuizWebApplication.Controllers
         public async Task<IActionResult> GoogleResponse()
         {
             var result = await HttpContext.AuthenticateAsync(CookieAuthenticationDefaults.AuthenticationScheme);
-            var claims = result.Principal.Identities.FirstOrDefault().Claims.
-            Select(claim =>
-            new
-            {
-                claim.Issuer,
-                claim.OriginalIssuer,
-                claim.Type,
-                claim.Value
-            });
-            return Json(claims);
+            return Redirect(Url.ActionLink(action: "Themes", controller: "Theme"));
         }
-
         public async Task<IActionResult> Logout()
         {
-            await HttpContext.SignOutAsync();
-            return RedirectToAction("Index");
+            if (User.Identity.IsAuthenticated)
+            {
+                await HttpContext.SignOutAsync();
+                return RedirectToAction("Index");
+            }
+            else
+                return Redirect(Url.ActionLink(action: "Index", controller: "Home"));
         }
     }
 }

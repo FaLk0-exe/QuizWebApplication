@@ -42,6 +42,7 @@ namespace QuizWebApplication
                  options.ClaimActions.MapJsonKey("urn:google:picture", "picture", "url");
              }
             );
+            services.AddAuthorization();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -59,6 +60,7 @@ namespace QuizWebApplication
             app.UseStaticFiles();
             app.UseSession();
             app.UseRouting();
+            app.UseAuthorization();
             app.UseCookiePolicy();
             app.UseAuthentication();
             app.UseEndpoints(endpoints =>

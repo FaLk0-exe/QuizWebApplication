@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using QuizDAL.EF;
 using QuizDAL.Interfaces;
 using System;
@@ -14,31 +15,40 @@ namespace QuizWebApplication.Controllers
         {
 
         }
-
         public IActionResult Themes([FromServices] IThemeRepository themeRepository)
         {
-            return View(themeRepository.GetThemes());
+            if (User.Identity.IsAuthenticated)
+                return View(themeRepository.GetThemes());
+            else
+                return Redirect(Url.ActionLink(action: "Index", controller: "Home"));
         }
 
         public IActionResult Start([FromServices] IThemeRepository themeRepository,
             [FromServices] IQuestionRepository questionRepository, int themeId)
         {
-            Theme theme;
-            try
+            if (User.Identity.IsAuthenticated)
             {
-                theme = themeRepository.GetTheme(themeId);
-                if (theme is null)
-                    throw new NullReferenceException(nameof(theme));
+                Theme theme;
+                try
+                {
+                    theme = themeRepository.GetTheme(themeId);
+                    if (theme is null)
+                        throw new NullReferenceException(nameof(theme));
+                }
+                catch (NullReferenceException)
+                {
+                    return NotFound();
+                }
+                ViewData["name"] = theme.Name;
+                ViewData["description"] = theme.ThemeDescription;
+                ViewData["count"] = Convert.ToInt32(questionRepository.GetQuestions(themeId).Count() / 2);
+                ViewData["orientedTime"] = Convert.ToInt32(Convert.ToInt32(ViewData["count"]) * 30 / 60);
+                return View();
             }
-            catch(NullReferenceException)
+            else
             {
-                return NotFound();
+                return Redirect(Url.ActionLink(action: "Index", controller: "Home"));
             }
-            ViewData["name"] = theme.Name;
-            ViewData["description"] = theme.ThemeDescription;
-            ViewData["count"] = Convert.ToInt32(questionRepository.GetQuestions(themeId).Count()/2);
-            ViewData["orientedTime"] = Convert.ToInt32(Convert.ToInt32(ViewData["count"]) * 30/ 60);
-            return View();
         }
     }
 }
