@@ -11,6 +11,7 @@ namespace QuizWebApplication.Controllers
     {
         private string _scope = "https://www.googleapis.com/auth/youtube";
         private string _redirectUrl = "https://localhost:5001/GoogleOauth/Code";
+        private string _redirectThemesUrl = "https://localhost:5001/Theme/Themes";
         public IActionResult RedirectOnOauthServer()
         {
             var codeVerifier = Guid.NewGuid().ToString();
@@ -23,7 +24,7 @@ namespace QuizWebApplication.Controllers
         {
             string codeVerifier = HttpContext.Session.GetString("codeVerifier");
             var tokenResult = await GoogleOauthService.ExchangeCodeOnTokenAsync(code,codeVerifier,_redirectUrl);
-            return Ok();
+            return Redirect("https://localhost:5001/Theme/Themes");
         }
     }
 }

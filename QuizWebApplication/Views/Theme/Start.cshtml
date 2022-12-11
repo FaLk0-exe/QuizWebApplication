@@ -1,0 +1,13 @@
+﻿
+@{
+    ViewData["Title"] = "Start";
+}
+
+<h1>Start</h1>
+<p>This test will take approximately @ViewData["orientedTime"] minutes.</p>
+<p>Total questions count: @ViewData["count"]</p>
+<p>Are you sure?</p>
+<input class="form-check-input" type="checkbox" onchange="changeButtonCondition()" id="check-accept">
+<label class="form-check-label" for="flexCheckChecked">I agree to start</label><br>
+<input type="button" id="accept-button" class="btn btn-primary" disabled value="Proceed">
+

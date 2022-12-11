@@ -7,15 +7,17 @@ using System.Linq;
 
 namespace QuizBLL.Services
 {
-    class QuizService:IQuizService
+    public class QuizService:IQuizService
     {
         ResultRepository _resultRepository;
         QuestionRepository _questionRepository;
         Result _result;
         int _themeId;
         List<Question> _questions;
+        Dictionary<int,int> _answers;
         int _currentQuestionIndex;
         bool _IsCompleted;
+        bool _IsInitialized;
         public Question CurrentQuestion
         {
             get
@@ -32,25 +34,34 @@ namespace QuizBLL.Services
                 }
             }
         }
-        public QuizService(string userId,int themeId,int count)
+        public QuizService()
         {
             _IsCompleted = false;
-            _themeId = themeId;
+            _IsInitialized = false;
             _resultRepository = new ResultRepository();
             _questionRepository = new QuestionRepository();
-            _result = new Result { UserId = userId, CorrectAnswersCount = 0,ThemeId=_themeId };
+            _answers = new Dictionary<int, int>();
+            _result = new Result { CorrectAnswersCount = 0 };
             _currentQuestionIndex = 0;
         }
 
-        public void InitializeQuestions(int count)
+        public void InitializeQuestions(string userId,int themeId,int count)
         {
-            try
+            if (!_IsInitialized)
             {
-                _questions = _questionRepository.GetRandomQuestions(_themeId, count).ToList();
-            }
-            catch
-            {
-                throw;
+                if (count > _questionRepository.GetQuestions(themeId).Count())
+                    throw new ArgumentException("'count' was greater then list size!");
+                _result.UserId = userId;
+                _result.ThemeId = themeId;
+                try
+                {
+                    _questions = _questionRepository.GetRandomQuestions(_themeId, count).ToList();
+                    _IsInitialized = true;
+                }
+                catch
+                {
+                    throw;
+                }
             }
         }
 
@@ -58,25 +69,17 @@ namespace QuizBLL.Services
         {
             if (_questions is null)
                 throw new NullReferenceException("'questions' was null");
-            try
-            {
-                if (_questionRepository.GetAnswers(CurrentQuestion.Id).First(answer => answer.Id == answerId).IsCorrect)
-                {
-                    _result.CorrectAnswersCount++;
-                }
-                _currentQuestionIndex++;
-            }
-            catch(NullReferenceException)
-            {
-                throw;
-            }
-            catch(ArgumentOutOfRangeException)
+            if (!_IsInitialized)
+                throw new Exception("Quiz service was not initialized!");
+            if(CurrentQuestion.Id==_questions.Last().Id)
             {
                 if (!_IsCompleted)
                     SubmitResult();
                 else
                     throw new Exception("Quiz was completed!");
             }
+            _answers.Add(_currentQuestionIndex, answerId);
+            _currentQuestionIndex++;
         }
         
         private void SubmitResult()
@@ -84,6 +87,11 @@ namespace QuizBLL.Services
             _result.CompleteDate = DateTime.Now;
             try
             {
+                foreach(var v in _answers)
+                {
+                    if (_questions[v.Key].Answers.Any(answer => answer.Id == v.Value && answer.IsCorrect))
+                        _result.CorrectAnswersCount++;
+                }
                 _resultRepository.SubmitResult(_result);
             }
             catch

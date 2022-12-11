@@ -1,0 +1,26 @@
+﻿@model IEnumerable<QuizDAL.EF.Theme>
+
+@{
+    ViewData["Title"] = "Themes";
+}
+
+<h1>Themes</h1>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                Choose quiz theme to continue
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                <a href="https://localhost:5001/Theme/Start/?themeId=@item.Id">@item.Name</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

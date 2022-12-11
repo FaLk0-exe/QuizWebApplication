@@ -6,7 +6,7 @@ namespace QuizBLL.Interfaces
 {
     public interface IQuizService
     {
-        public void InitializeQuestions(int count);
+        public void InitializeQuestions(string userId, int themeId, int count);
         public void SelectAnswer(int answerId);
    
     }
