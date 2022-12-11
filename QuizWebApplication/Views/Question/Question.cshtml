@@ -1,0 +1,13 @@
+﻿@model QuizWebApplication.Models.QuestionViewModel
+@{
+    ViewData["Title"] = "Question";
+}
+
+<h1>@Model.Question.Name</h1>
+@foreach(var answer in Model.Answers)
+{
+    <input type="radio" id="@answer.Id" name="answer" asp-for="AnswerId" value="@answer.Id" onclick="changeButtonConditionForRB()"/>
+    <label for ="@answer.Id">@answer.Name</label><br>
+}
+<input type="button" id="next-button" class="btn btn-primary" value="@ViewData["buttonDescription"]" disabled onclick="window.location.href = '@Url.ActionLink(action:"Question", controller:"Question",values:new { question = Model.Question, answerId = Model.AnswerId })';"/>
+

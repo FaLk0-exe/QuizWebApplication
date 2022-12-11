@@ -1,0 +1,9 @@
+﻿@model QuizDAL.EF.Result
+@{
+    ViewData["Title"] = "Result";
+}
+
+<h1>@Model.Theme.Name</h1>
+<p>Result: @Model.CorrectAnswersCount / @Model.CorrectAnswersCount*2</p>
+<p>Submission date: @Model.CompleteDate.ToString("dd.MM.yyyy HH:mm:ss")</p> 
+

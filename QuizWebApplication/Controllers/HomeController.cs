@@ -48,7 +48,6 @@ namespace QuizWebApplication.Controllers
         public async Task<IActionResult> GoogleResponse()
         {
             var result = await HttpContext.AuthenticateAsync(CookieAuthenticationDefaults.AuthenticationScheme);
-            
             return Redirect(Url.ActionLink(action: "Themes", controller: "Theme"));
         }
         public async Task<IActionResult> Logout()

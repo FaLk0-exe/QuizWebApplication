@@ -12,28 +12,26 @@ namespace QuizBLL.Services
         ResultRepository _resultRepository;
         QuestionRepository _questionRepository;
         Result _result;
-        int _themeId;
+  
         List<Question> _questions;
         Dictionary<int,int> _answers;
         int _currentQuestionIndex;
         bool _IsCompleted;
         bool _IsInitialized;
+        public bool IsCompleted => _IsCompleted;
+        public bool IsInitialized => _IsInitialized;
         public Question CurrentQuestion
         {
             get
             {
                 if(_questions is null)
                     throw new NullReferenceException("'questions' was null");
-                try
-                {
-                    return _questions.ElementAt(_currentQuestionIndex);
-                }
-                catch(ArgumentOutOfRangeException)
-                {
-                    throw;
-                }
+                return _questions.ElementAt(_currentQuestionIndex);
             }
         }
+
+        public List<Question> Questions { get { return _questions; } }
+
         public QuizService()
         {
             _IsCompleted = false;
@@ -55,7 +53,7 @@ namespace QuizBLL.Services
                 _result.ThemeId = themeId;
                 try
                 {
-                    _questions = _questionRepository.GetRandomQuestions(_themeId, count).ToList();
+                    _questions = _questionRepository.GetRandomQuestions(_result.ThemeId, count).ToList();
                     _IsInitialized = true;
                 }
                 catch
@@ -71,18 +69,18 @@ namespace QuizBLL.Services
                 throw new NullReferenceException("'questions' was null");
             if (!_IsInitialized)
                 throw new Exception("Quiz service was not initialized!");
-            if(CurrentQuestion.Id==_questions.Last().Id)
-            {
-                if (!_IsCompleted)
-                    SubmitResult();
-                else
-                    throw new Exception("Quiz was completed!");
-            }
-            _answers.Add(_currentQuestionIndex, answerId);
-            _currentQuestionIndex++;
+            foreach (var a in _answers)
+                if (a.Value == answerId)
+                {
+                    _answers[_currentQuestionIndex] = answerId;
+                    _currentQuestionIndex++;
+                    return;
+                }
+                _answers.Add(_currentQuestionIndex, answerId);
+                _currentQuestionIndex++;
         }
         
-        private void SubmitResult()
+        public void SubmitResult()
         {
             _result.CompleteDate = DateTime.Now;
             try
@@ -93,11 +91,23 @@ namespace QuizBLL.Services
                         _result.CorrectAnswersCount++;
                 }
                 _resultRepository.SubmitResult(_result);
+                ClearService();
             }
             catch
             {
                 throw new Exception("Problem occured at server side. Please, write to developer");
             }
+        }
+
+        private void ClearService()
+        {
+            _answers.Clear();
+            _result = null;
+            _questions.Clear();
+            _result = new Result { CorrectAnswersCount = 0 };
+            _currentQuestionIndex = 0;
+            _IsCompleted = false;
+            _IsInitialized = false;
         }
     }
 }

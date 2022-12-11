@@ -4,6 +4,7 @@ using System;
 using System.Linq;
 using System.Collections.Generic;
 using System.Text;
+using Microsoft.EntityFrameworkCore;
 
 namespace QuizDAL.Repositories
 {
@@ -14,23 +15,34 @@ namespace QuizDAL.Repositories
         {
             _quizContext = new QuizContext();
         }
-        public IEnumerable<Answer> GetAnswers(int questionId)
+
+        public Answer GetAnswer(int id)
         {
-            return _quizContext.Answers.Where(answer=>answer.QuestionId==questionId).AsEnumerable();
+            return _quizContext.Answers.Include(a => a.Question).ThenInclude(a => a.Theme).FirstOrDefault(a => a.Id == id);
         }
 
-        public IEnumerable<Question> GetQuestions(int themeId)
+        public List<Answer> GetAnswers(int questionId)
         {
-            return _quizContext.Questions.Where(question=>question.ThemeId==themeId).AsEnumerable();
+            return _quizContext.Answers.Include(q => q.Question).Where(answer=>answer.QuestionId==questionId).ToList();
         }
 
-        public IEnumerable<Question> GetRandomQuestions(int themeId, int count)
+        public Question GetQuestion(int id)
+        {
+            return _quizContext.Questions.FirstOrDefault(question => question.Id == id);
+        }
+
+        public List<Question> GetQuestions(int themeId)
+        {
+            return _quizContext.Questions.Include(q=>q.Theme).Where(question=>question.ThemeId==themeId).ToList();
+        }
+
+        public List<Question> GetRandomQuestions(int themeId, int count)
         {
             Random random=new Random();
             var questions = GetQuestions(themeId);
             if (questions.Count() < count)
                 throw new ArgumentException("'count' was greater then question list size!");
-            return questions.OrderBy(question => random.Next()).Take(count);
+            return questions.OrderBy(question => random.Next()).Take(count).ToList();
         }
     }
 }

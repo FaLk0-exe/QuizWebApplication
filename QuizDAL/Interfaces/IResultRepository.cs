@@ -8,8 +8,8 @@ namespace QuizDAL.Interfaces
 {
     public interface IResultRepository
     {
-        public Result GetResult(string userId);
-        public IEnumerable<Result> GetResults();
+        public Result GetResult(string userId, int themeId);
+        public List<Result> GetResults();
         public void SubmitResult(Result result);
     }
 }

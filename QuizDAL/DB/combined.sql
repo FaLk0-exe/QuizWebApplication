@@ -1,4 +1,39 @@
-﻿/*INSERT INTO Theme([name]) VALUES('C#.NET'),('JS'),('C++'),('HTML/CSS'),('Linear algebra'),('Design patterns');*/
+﻿CREATE TABLE Theme(
+id INT NOT NULL PRIMARY KEY IDENTITY(1,1),
+[name] NVARCHAR(100) NOT NULL,
+themeDescription NVARCHAR(256) NOT NULL
+);
+
+CREATE TABLE Question(
+id INT NOT NULL PRIMARY KEY IDENTITY(1,1),
+[name] NVARCHAR(100) NOT NULL,
+themeId INT NOT NULL,
+FOREIGN KEY (themeId) REFERENCES Theme(id)
+);
+
+CREATE TABLE Answer(
+id INT NOT NULL PRIMARY KEY IDENTITY(1,1),
+[name] NVARCHAR(256) NOT NULL,
+isCorrect BIT NOT NULL,
+questionId INT NOT NULL,
+FOREIGN KEY (questionId) REFERENCES Question(id)
+);
+
+CREATE TABLE Result(
+id INT NOT NULL PRIMARY KEY IDENTITY(1,1),
+userId NVARCHAR(256) NOT NULL,
+completeDate DATETIME NOT NULL,
+themeId INT NOT NULL,
+correctAnswersCount INT NOT NULL,
+FOREIGN KEY (themeId) REFERENCES Theme(id)
+);
+
+INSERT INTO Theme([name],themeDescription) VALUES('C#.NET','Quiz about different topics of C#.NET'),
+('JS','Quiz about different topics of JS'),
+('C++','Quiz about different topics of C++'),
+('HTML/CSS','Quiz about different topics of HTML/CSS'),
+('Linear algebra','Quiz about different topics of linear algebra'),
+('Design patterns','Quiz about different topics of design patterns');
 INSERT INTO Question([name],themeId) VALUES
 ('What is the difference between static, public, and void?',1),
 ('What means a key word "yield"?',1),

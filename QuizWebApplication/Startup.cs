@@ -27,7 +27,7 @@ namespace QuizWebApplication
         {
             services.AddControllersWithViews();
             services.AddSession();
-            services.AddTransient<IQuizService, QuizService>();
+            services.AddSingleton<IQuizService, QuizService>();
             services.AddTransient<IThemeRepository, ThemeRepository>();
             services.AddTransient<IResultRepository, ResultRepository>();
             services.AddTransient<IQuestionRepository, QuestionRepository>();
@@ -41,7 +41,6 @@ namespace QuizWebApplication
                  options.ClientSecret = Configuration["Authentication:Google:ClientSecret"];
              }
             );
-            services.AddAuthorization();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -59,7 +58,6 @@ namespace QuizWebApplication
             app.UseStaticFiles();
             app.UseSession();
             app.UseRouting();
-            app.UseAuthorization();
             app.UseCookiePolicy();
             app.UseAuthentication();
             app.UseEndpoints(endpoints =>

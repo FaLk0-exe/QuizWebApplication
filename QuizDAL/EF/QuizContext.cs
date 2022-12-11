@@ -15,6 +15,7 @@ namespace QuizDAL.EF
         public QuizContext(DbContextOptions<QuizContext> options)
             : base(options)
         {
+            
         }
 
         public virtual DbSet<Answer> Answers { get; set; }
@@ -42,7 +43,7 @@ namespace QuizDAL.EF
 
                 entity.Property(e => e.Name)
                     .IsRequired()
-                    .HasMaxLength(100)
+                    .HasMaxLength(256)
                     .HasColumnName("name");
 
                 entity.Property(e => e.QuestionId).HasColumnName("questionId");
@@ -53,7 +54,6 @@ namespace QuizDAL.EF
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK__Answer__question__286302EC");
             });
-
             modelBuilder.Entity<Question>(entity =>
             {
                 entity.ToTable("Question");

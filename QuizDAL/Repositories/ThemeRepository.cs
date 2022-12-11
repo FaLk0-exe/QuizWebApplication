@@ -20,9 +20,9 @@ namespace QuizDAL.Repositories
             return _context.Themes.FirstOrDefault(theme => theme.Id == id);
         }
 
-        public IEnumerable<Theme> GetThemes()
+        public List<Theme> GetThemes()
         {
-            return _context.Themes.AsEnumerable();
+            return _context.Themes.ToList();
         }
     }
 }

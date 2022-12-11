@@ -1,8 +1,8 @@
-﻿
+﻿@model QuizWebApplication.Models.StartQuizViewModel
 @{
     ViewData["Title"] = ViewData["name"];
 }
-
+<h1>@Model.ThemeId</h1>
 <h1>@ViewData["name"]</h1>
 <h4>@ViewData["description"]</h4>
 <p>This test will take approximately @ViewData["orientedTime"] minutes.</p>
@@ -10,5 +10,5 @@
 <p>Are you sure?</p>
 <label class="form-check-label">I agree to start</label>
 <input type="checkbox" onchange="changeButtonCondition()" id="check-accept"><br>
-<input type="button" id="accept-button" class="btn btn-primary" disabled value="Proceed">
+<input type="button" id="accept-button" class="btn btn-primary" value="Proceed" disabled onclick="window.location.href = '@Url.ActionLink(action:"Start", controller:"Question",values:Model)';"/>
 

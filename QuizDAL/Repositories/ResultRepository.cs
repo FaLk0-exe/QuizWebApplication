@@ -1,4 +1,5 @@
-﻿using QuizDAL.EF;
+﻿using Microsoft.EntityFrameworkCore;
+using QuizDAL.EF;
 using QuizDAL.Interfaces;
 using System;
 using System.Collections.Generic;
@@ -14,14 +15,14 @@ namespace QuizDAL.Repositories
         {
             _context = new QuizContext();
         }
-        public Result GetResult(string userId)
+        public Result GetResult(string userId,int themeId)
         {
-            return _context.Results.FirstOrDefault(result => result.UserId == userId);
+            return _context.Results.Include(result=>result.Theme).FirstOrDefault(result => result.UserId == userId);
         }
 
-        public IEnumerable<Result> GetResults()
+        public List<Result> GetResults()
         {
-            return _context.Results.AsEnumerable();
+            return _context.Results.ToList();
         }
 
         public void SubmitResult(Result result)

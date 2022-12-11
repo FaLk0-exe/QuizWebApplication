@@ -8,8 +8,10 @@ namespace QuizDAL.Interfaces
 {
     public interface IQuestionRepository
     {
-        public IEnumerable<Question> GetQuestions(int themeId);
-        public IEnumerable<Answer> GetAnswers(int questionId);
-        public IEnumerable<Question> GetRandomQuestions(int themeId,int count);
+        public List<Question> GetQuestions(int themeId);
+        public List<Answer> GetAnswers(int questionId);
+        public List<Question> GetRandomQuestions(int themeId,int count);
+        public Question GetQuestion(int id);
+        public Answer GetAnswer(int id);
     }
 }

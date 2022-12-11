@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using QuizDAL.EF;
 using QuizDAL.Interfaces;
+using QuizWebApplication.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -23,11 +24,15 @@ namespace QuizWebApplication.Controllers
                 return Redirect(Url.ActionLink(action: "Index", controller: "Home"));
         }
 
-        public IActionResult Start([FromServices] IThemeRepository themeRepository,
+        public IActionResult Start([FromServices]IResultRepository resultRepository,
+            [FromServices] IThemeRepository themeRepository,
             [FromServices] IQuestionRepository questionRepository, int themeId)
         {
             if (User.Identity.IsAuthenticated)
             {
+                var email = User.Claims.First(claim => claim.Value.Contains("@")).Value;
+                if(resultRepository.GetResult(email,themeId)==null)
+                    return Redirect(Url.ActionLink(controller: "Result", action: "Result"));
                 Theme theme;
                 try
                 {
@@ -39,11 +44,12 @@ namespace QuizWebApplication.Controllers
                 {
                     return NotFound();
                 }
+                int count = Convert.ToInt32(questionRepository.GetQuestions(themeId).Count() / 2);
                 ViewData["name"] = theme.Name;
                 ViewData["description"] = theme.ThemeDescription;
-                ViewData["count"] = Convert.ToInt32(questionRepository.GetQuestions(themeId).Count() / 2);
+                ViewData["count"] =count;
                 ViewData["orientedTime"] = Convert.ToInt32(Convert.ToInt32(ViewData["count"]) * 30 / 60);
-                return View();
+                return View(new StartQuizViewModel { ThemeId=theme.Id,Count=count});
             }
             else
             {
