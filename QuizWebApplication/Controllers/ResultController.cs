@@ -17,6 +17,8 @@ namespace QuizWebApplication.Controllers
         
         public IActionResult Result([FromServices] IResultRepository resultRepository, int themeId,string userId)
         {
+            if (!User.Identity.IsAuthenticated)
+                return Redirect(Url.ActionLink(action: "Index", controller: "Home"));
             var result = resultRepository.GetResult(userId, themeId);
             if (result == null)
                 return NotFound();

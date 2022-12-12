@@ -21,7 +21,6 @@ namespace QuizWebApplication.Controllers
         public HomeController()
         {
         }
-
         
         public IActionResult Index()
         {

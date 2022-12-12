@@ -19,6 +19,8 @@ namespace QuizWebApplication.Controllers
 
         private IActionResult RedirectToResult(IQuizService quizService)
         {
+            if (!User.Identity.IsAuthenticated)
+                return Redirect(Url.ActionLink(action: "Index", controller: "Home"));
             return Redirect(Url.ActionLink(controller: "Result", action: "Result", values: new
             {
                 themeId = quizService.ThemeId,
@@ -30,6 +32,8 @@ namespace QuizWebApplication.Controllers
 
         public IActionResult Start([FromServices] IQuizService quizService, StartQuizViewModel model)
         {
+            if (!User.Identity.IsAuthenticated)
+                return Redirect(Url.ActionLink(action: "Index", controller: "Home"));
             var email = UserId;
             quizService.InitializeQuestions(email, model.ThemeId, model.Count);
             return Redirect(Url.ActionLink(action: "Question", controller: "Question",values:new {AnswerId = -1}));
@@ -37,6 +41,8 @@ namespace QuizWebApplication.Controllers
 
         public IActionResult Question([FromServices] IResultRepository resultRepository,[FromServices] IQuestionRepository questionRepository,[FromServices] IQuizService quizService, int AnswerId)
         {
+            if (!User.Identity.IsAuthenticated)
+                return Redirect(Url.ActionLink(action: "Index", controller: "Home"));
             QuestionViewModel questionViewModel = new QuestionViewModel();
             if (!quizService.IsCompleted)
             {

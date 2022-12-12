@@ -67,8 +67,8 @@ namespace QuizBLL.Services
                 throw new NullReferenceException("'questions' was null");
             if (!_IsInitialized)
                 throw new Exception("Quiz service was not initialized!");
-            foreach (var a in _answers)
-                if (a.Value == answerId)
+            foreach (var answer in _answers)
+                if (answer.Value == answerId)
                 {
                     _answers[_currentQuestionIndex] = answerId;
                     _currentQuestionIndex++;
@@ -83,9 +83,9 @@ namespace QuizBLL.Services
             _result.CompleteDate = DateTime.Now;
             try
             {
-                foreach(var v in _answers)
+                foreach(var answer in _answers)
                 {
-                    if (_questions[v.Key].Answers.Any(answer => answer.Id == v.Value && answer.IsCorrect))
+                    if (_questions[answer.Key].Answers.Any(ans => ans.Id == answer.Value && ans.IsCorrect))
                         _result.CorrectAnswersCount++;
                 }
                 _resultRepository.SubmitResult(_result);
