@@ -6,5 +6,5 @@
 <h1>@Model.ThemeName</h1>
 <p>Result: @Model.CorrectAnswersCount / @(Model.TotalAnswersCount/2)</p>
 <p>Submission date: @Model.CompleteDate.ToString("dd.MM.yyyy HH:mm:ss")</p><br>
-<input type="submit" class="btn btn-primary" value="Go to all quizzes" onclick="window.location.href = '@Url.ActionLink(action:"Themes", controller:"Theme")';"/>
+<input type="submit" class="btn btn-primary" value="Back" onclick="window.location.href = '@Url.ActionLink(action:"Themes", controller:"Theme")';"/>
 

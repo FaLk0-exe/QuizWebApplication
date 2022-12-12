@@ -12,16 +12,15 @@ namespace QuizBLL.Services
         ResultRepository _resultRepository;
         QuestionRepository _questionRepository;
         Result _result;
-  
         List<Question> _questions;
         Dictionary<int,int> _answers;
         int _currentQuestionIndex;
         bool _IsCompleted;
         bool _IsInitialized;
-        int _themeId;
-        public int ThemeId { get => _themeId; }
+        public int ThemeId => _result.ThemeId;
         public bool IsCompleted => _IsCompleted;
         public bool IsInitialized => _IsInitialized;
+        public List<Question> Questions => _questions;
         public Question CurrentQuestion
         {
             get
@@ -31,8 +30,6 @@ namespace QuizBLL.Services
                 return _questions.ElementAt(_currentQuestionIndex);
             }
         }
-
-        public List<Question> Questions { get { return _questions; } }
 
         public QuizService()
         {
@@ -50,7 +47,6 @@ namespace QuizBLL.Services
             {
                 if (count > _questionRepository.GetQuestions(themeId).Count())
                     throw new ArgumentException("'count' was greater then list size!");
-                _themeId = themeId;
                 _result.UserId = userId;
                 _result.ThemeId = themeId;
                 try
@@ -103,8 +99,8 @@ namespace QuizBLL.Services
         public void ClearService()
         {
             _answers.Clear();
-            _result = null;
             _questions.Clear();
+            _result = null;
             _result = new Result { CorrectAnswersCount = 0 };
             _currentQuestionIndex = 0;
             _IsInitialized = false;

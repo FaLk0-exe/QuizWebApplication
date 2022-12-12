@@ -47,7 +47,7 @@ namespace QuizWebApplication.Controllers
 
         public async Task<IActionResult> GoogleResponse()
         {
-            var result = await HttpContext.AuthenticateAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+            await HttpContext.AuthenticateAsync(CookieAuthenticationDefaults.AuthenticationScheme);
             return Redirect(Url.ActionLink(action: "Themes", controller: "Theme"));
         }
         public async Task<IActionResult> Logout()
@@ -57,8 +57,7 @@ namespace QuizWebApplication.Controllers
                 await HttpContext.SignOutAsync();
                 return RedirectToAction("Index");
             }
-            else
-                return Redirect(Url.ActionLink(action: "Index", controller: "Home"));
+            return Redirect(Url.ActionLink(action: "Index", controller: "Home"));
         }
     }
 }
