@@ -39,6 +39,7 @@ namespace QuizBLL.Services
             _answers = new Dictionary<int, int>();
             _result = new Result { CorrectAnswersCount = 0 };
             _currentQuestionIndex = 0;
+            _questions = new List<Question>();
         }
 
         public void InitializeQuestions(string userId,int themeId,int count)
@@ -70,8 +71,6 @@ namespace QuizBLL.Services
             foreach (var answer in _answers)
                 if (answer.Value == answerId)
                 {
-                    _answers[_currentQuestionIndex] = answerId;
-                    _currentQuestionIndex++;
                     return;
                 }
                 _answers.Add(_currentQuestionIndex, answerId);

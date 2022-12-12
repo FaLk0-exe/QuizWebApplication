@@ -45,7 +45,7 @@ namespace QuizWebApplication.Controllers
                 return View(new StartQuizViewModel
                 {
                     ThemeId = theme.Id,
-                    Count = questionRepository.GetQuestions(themeId).Count(),
+                    Count = questionRepository.GetQuestions(themeId).Count()/2,
                     Description = theme.ThemeDescription,
                     Name = theme.Name
                 });

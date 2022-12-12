@@ -17,7 +17,7 @@ namespace QuizDAL.Repositories
         }
         public Result GetResult(string userId,int themeId)
         {
-            return _context.Results.Include(result=>result.Theme).ThenInclude(result=>result.Questions).FirstOrDefault(result => result.UserId == userId);
+            return _context.Results.Include(result=>result.Theme).ThenInclude(result=>result.Questions).FirstOrDefault(result => result.UserId == userId&& result.ThemeId == themeId);
         }
 
         public List<Result> GetResults()

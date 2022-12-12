@@ -34,6 +34,7 @@ namespace QuizWebApplication.Controllers
         {
             if (!User.Identity.IsAuthenticated)
                 return Redirect(Url.ActionLink(action: "Index", controller: "Home"));
+            quizService.ClearService();
             var email = UserId;
             quizService.InitializeQuestions(email, model.ThemeId, model.Count);
             return Redirect(Url.ActionLink(action: "Question", controller: "Question",values:new {AnswerId = -1}));
@@ -59,7 +60,6 @@ namespace QuizWebApplication.Controllers
                 catch (ArgumentOutOfRangeException)
                 {
                     quizService.SubmitResult();
-                    quizService.ClearService();
                     return RedirectToResult(quizService);
                 }
                 questionViewModel.Answers = questionRepository.GetAnswers(questionViewModel.Question.Id);
