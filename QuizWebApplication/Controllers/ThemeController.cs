@@ -24,15 +24,13 @@ namespace QuizWebApplication.Controllers
                 return Redirect(Url.ActionLink(action: "Index", controller: "Home"));
         }
 
-        public IActionResult Start([FromServices]IResultRepository resultRepository,
-            [FromServices] IThemeRepository themeRepository,
-            [FromServices] IQuestionRepository questionRepository, int themeId)
+        public IActionResult Start([FromServices] IResultRepository resultRepository, [FromServices] IThemeRepository themeRepository, [FromServices] IQuestionRepository questionRepository, int themeId)
         {
             if (User.Identity.IsAuthenticated)
             {
                 var email = User.Claims.First(claim => claim.Value.Contains("@")).Value;
-                if(resultRepository.GetResult(email,themeId)!=null)
-                    return Redirect(Url.ActionLink(controller: "Result", action: "Result",values:new {userId=email,themeId=themeId }));
+                if (resultRepository.GetResult(email, themeId) != null)
+                    return Redirect(Url.ActionLink(controller: "Result", action: "Result", values: new { userId = email, themeId = themeId }));
                 Theme theme;
                 try
                 {
@@ -44,17 +42,15 @@ namespace QuizWebApplication.Controllers
                 {
                     return NotFound();
                 }
-                int count = Convert.ToInt32(questionRepository.GetQuestions(themeId).Count() / 2);
-                ViewData["name"] = theme.Name;
-                ViewData["description"] = theme.ThemeDescription;
-                ViewData["count"] =count;
-                ViewData["orientedTime"] = Convert.ToInt32(Convert.ToInt32(ViewData["count"]) * 30 / 60);
-                return View(new StartQuizViewModel { ThemeId=theme.Id,Count=count});
+                return View(new StartQuizViewModel
+                {
+                    ThemeId = theme.Id,
+                    Count = questionRepository.GetQuestions(themeId).Count(),
+                    Description = theme.ThemeDescription,
+                    Name = theme.Name
+                });
             }
-            else
-            {
-                return Redirect(Url.ActionLink(action: "Index", controller: "Home"));
-            }
+            return Redirect(Url.ActionLink(action: "Index", controller: "Home"));
         }
     }
 }
