@@ -17,45 +17,51 @@ namespace QuizWebApplication.Controllers
 
         }
 
+        private string UserId{ get => User.Claims.First(claim => claim.Value.Contains("@")).Value; }
+
         public IActionResult Start([FromServices] IQuizService quizService, StartQuizViewModel model)
         {
-            var email = User.Claims.First(claim => claim.Value.Contains("@")).Value;
+            var email = UserId;
             quizService.InitializeQuestions(email, model.ThemeId, model.Count);
-            var question = quizService.CurrentQuestion;
-            return Redirect(Url.ActionLink(action: "Question", controller: "Question", question));
+            return Redirect(Url.ActionLink(action: "Question", controller: "Question",values:new {AnswerId = -1}));
         }
 
-        public IActionResult Question([FromServices] IQuestionRepository questionRepository, [FromServices] IQuizService quizService, Question question, int? answerId)
+        public IActionResult Question([FromServices] IResultRepository resultRepository,
+            [FromServices] IQuestionRepository questionRepository,
+            [FromServices] IQuizService quizService, int AnswerId)
         {
+            QuestionViewModel questionViewModel = new QuestionViewModel();
             if (!quizService.IsCompleted)
             {
-                if (answerId != null)
-                    quizService.SelectAnswer((int)answerId);
-                if (question.Id == quizService.Questions.Last().Id)
-                    ViewData["buttonDescription"] = "Finish";
-                else
-                    ViewData["buttonDescription"] = "Next";
+                if (AnswerId!= -1)
+                    quizService.SelectAnswer(AnswerId);
                 try
                 {
-                    question = quizService.CurrentQuestion;
+                    questionViewModel.Question = quizService.CurrentQuestion;
+                    if (questionViewModel.Question.Id == quizService.Questions.Last().Id)
+                        ViewData["buttonDescription"] = "Finish";
+                    else
+                        ViewData["buttonDescription"] = "Next";
                 }
                 catch (ArgumentOutOfRangeException)
                 {
                     quizService.SubmitResult();
+                    quizService.ClearService();
                     return Redirect(Url.ActionLink(controller: "Result", action: "Result", values: new
                     {
-                        themeId = questionRepository.GetQuestion((int)answerId),
-                        userId = User.Claims.First(claim => claim.Value.Contains("@")).Value
+                        themeId = quizService.ThemeId,
+                        UserId = UserId
                     }));
                 }
-                var answers = questionRepository.GetAnswers(question.Id);
-                return View(new QuestionViewModel { Answers = answers.ToList(), Question = question, AnswerId = -1 });
+                questionViewModel.Answers = questionRepository.GetAnswers(questionViewModel.Question.Id);
+                questionViewModel.AnswerId = -1;
+                return View(questionViewModel);
             }
             else
             {
                 return Redirect(Url.ActionLink(controller: "Result", action: "Result", values: new
                 {
-                    themeId = questionRepository.GetQuestion((int)answerId),
+                    themeId = questionRepository.GetQuestion(questionViewModel.AnswerId),
                     userId = User.Claims.First(claim => claim.Value.Contains("@")).Value
                 }));
             }

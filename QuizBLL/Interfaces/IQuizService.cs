@@ -13,6 +13,8 @@ namespace QuizBLL.Interfaces
         public void SelectAnswer(int answerId);
         public Question CurrentQuestion { get; }
         public List<Question> Questions { get; }
+        public int ThemeId { get; }
         public void SubmitResult();
+        public void ClearService();
     }
 }

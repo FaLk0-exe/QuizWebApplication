@@ -31,8 +31,8 @@ namespace QuizWebApplication.Controllers
             if (User.Identity.IsAuthenticated)
             {
                 var email = User.Claims.First(claim => claim.Value.Contains("@")).Value;
-                if(resultRepository.GetResult(email,themeId)==null)
-                    return Redirect(Url.ActionLink(controller: "Result", action: "Result"));
+                if(resultRepository.GetResult(email,themeId)!=null)
+                    return Redirect(Url.ActionLink(controller: "Result", action: "Result",values:new {userId=email,themeId=themeId }));
                 Theme theme;
                 try
                 {

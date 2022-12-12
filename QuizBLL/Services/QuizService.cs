@@ -18,6 +18,8 @@ namespace QuizBLL.Services
         int _currentQuestionIndex;
         bool _IsCompleted;
         bool _IsInitialized;
+        int _themeId;
+        public int ThemeId { get => _themeId; }
         public bool IsCompleted => _IsCompleted;
         public bool IsInitialized => _IsInitialized;
         public Question CurrentQuestion
@@ -34,7 +36,6 @@ namespace QuizBLL.Services
 
         public QuizService()
         {
-            _IsCompleted = false;
             _IsInitialized = false;
             _resultRepository = new ResultRepository();
             _questionRepository = new QuestionRepository();
@@ -49,6 +50,7 @@ namespace QuizBLL.Services
             {
                 if (count > _questionRepository.GetQuestions(themeId).Count())
                     throw new ArgumentException("'count' was greater then list size!");
+                _themeId = themeId;
                 _result.UserId = userId;
                 _result.ThemeId = themeId;
                 try
@@ -91,7 +93,6 @@ namespace QuizBLL.Services
                         _result.CorrectAnswersCount++;
                 }
                 _resultRepository.SubmitResult(_result);
-                ClearService();
             }
             catch
             {
@@ -99,14 +100,13 @@ namespace QuizBLL.Services
             }
         }
 
-        private void ClearService()
+        public void ClearService()
         {
             _answers.Clear();
             _result = null;
             _questions.Clear();
             _result = new Result { CorrectAnswersCount = 0 };
             _currentQuestionIndex = 0;
-            _IsCompleted = false;
             _IsInitialized = false;
         }
     }

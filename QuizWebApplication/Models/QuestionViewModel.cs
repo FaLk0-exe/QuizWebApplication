@@ -11,7 +11,6 @@ namespace QuizWebApplication.Models
     {
         public Question Question { get; set; }
         public List<Answer> Answers { get; set; }
-        [BindProperty]
         public int AnswerId { get; set; }
     }
 }

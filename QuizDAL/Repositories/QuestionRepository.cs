@@ -33,7 +33,7 @@ namespace QuizDAL.Repositories
 
         public List<Question> GetQuestions(int themeId)
         {
-            return _quizContext.Questions.Include(q=>q.Theme).Where(question=>question.ThemeId==themeId).ToList();
+            return _quizContext.Questions.Include(q=>q.Answers).Include(q=>q.Theme).Where(question=>question.ThemeId==themeId).ToList();
         }
 
         public List<Question> GetRandomQuestions(int themeId, int count)
